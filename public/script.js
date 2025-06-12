@@ -23,14 +23,7 @@ function loadInitialData() {
         setInputValues(queryParams);
     } else {
         // Pre-populate with user ID 'mona'
-        setInputValues({
-            firstname: 'Mona',
-            lastname: 'Lisa',
-            jobtitle: 'Octocat',
-            askmeabout: '',
-            archetype: 'cat',
-            githubhandle: 'mona'
-        });
+        setInputValues({});
     }
     
     // Update full string after setting initial values
@@ -41,7 +34,7 @@ function loadInitialData() {
 // Call loadInitialData when the page loads
 window.addEventListener('load', loadInitialData);
 
-const inputs = document.querySelectorAll('input:not(#fullstring)');
+const inputs = document.querySelectorAll('input:not(#fullstring), select');
 const fullStringInput = document.getElementById('fullstring');
 const qrcodeContainer = document.getElementById('qrcode');
 const canvas = document.getElementById('badgeCanvas');
@@ -148,7 +141,7 @@ inputs.forEach(input => {
 
 updateFullString(); // Initial generation
 
-const otherInputs = document.querySelectorAll('input:not(#fullstring)');
+const otherInputs = document.querySelectorAll('input:not(#fullstring), select');
 
 function parseFullString(fullString) {
     const parts = fullString.split('^');

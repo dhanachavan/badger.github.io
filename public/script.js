@@ -256,9 +256,12 @@ function drawBadge() {
     ctx.fillText(archetype, leftMargin, 80);
 
     // Draw archetype image
-    const img = archetypeImages[archetype];
-    if (img && img.complete) {
+    let selectedArchetype = document.getElementById('archetype').value;
+    const img = archetypeImages[selectedArchetype];
+    if (img && img.complete && img.naturalWidth > 0) {
         ctx.drawImage(img, canvas.width - 74, 10, 64, 64);
+    } else if (img) {
+        img.onload = () => drawBadge();
     }
 
     // Convert to 2-bit black and white after drawing so you get an accurate preview
@@ -412,7 +415,10 @@ display.update()`;
 
 // Update event listeners for select
 const archetypeInput = document.getElementById('archetype');
-archetypeInput.addEventListener('change', updateFullString);
+archetypeInput.addEventListener('change', () => {
+    updateFullString();
+    setTimeout(drawBadge, 50); // Ensure image is loaded before drawing
+});
 
 // Preload archetype images
 const archetypeImages = {};
@@ -420,5 +426,6 @@ const archetypeList = ['cat', 'dog', 'fox', 'owl', 'bear', 'octopus'];
 archetypeList.forEach(type => {
     const img = new Image();
     img.src = `./archetypes/${type}.png`;
+    img.onload = () => { if (document.getElementById('archetype').value === type) drawBadge(); };
     archetypeImages[type] = img;
 });

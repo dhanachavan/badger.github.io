@@ -236,18 +236,6 @@ function drawBadge() {
     ctx.fillText(jobtitle, leftMargin, jobTitleY);
     ctx.fillText(githubhandle, leftMargin, githubHandleY);
 
-    // Get ask me about field value
-    const askmeabout = document.getElementById('askmeabout').value;
-    ctx.font = 'italic 14px "Mona Sans"';
-    ctx.fillStyle = '#333';
-    ctx.fillText(askmeabout, leftMargin, 80);
-
-    // Get archetype field value
-    const archetype = document.getElementById('archetype').value;
-    ctx.font = 'italic 14px "Mona Sans"';
-    ctx.fillStyle = '#333';
-    ctx.fillText(archetype, leftMargin, 80);
-
     // Draw archetype image
     let selectedArchetype = document.getElementById('archetype').value;
     const img = archetypeImages[selectedArchetype];
@@ -256,6 +244,12 @@ function drawBadge() {
     } else if (img) {
         img.onload = () => drawBadge();
     }
+
+    // Draw ask me about field value
+    const askmeabout = document.getElementById('askmeabout').value;
+    ctx.font = 'italic 14px "Mona Sans"';
+    ctx.fillStyle = '#333';
+    ctx.fillText(askmeabout, leftMargin, 80);
 
     // Convert to 2-bit black and white after drawing so you get an accurate preview
     // of e-ink display

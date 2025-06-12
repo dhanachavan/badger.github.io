@@ -236,11 +236,12 @@ function drawBadge() {
     ctx.fillText(jobtitle, leftMargin, jobTitleY);
     ctx.fillText(githubhandle, leftMargin, githubHandleY);
 
-    // Draw archetype image
+    // Draw archetype image (make it bigger)
     let selectedArchetype = document.getElementById('archetype').value;
     const img = archetypeImages[selectedArchetype];
     if (img && img.complete && img.naturalWidth > 0) {
-        ctx.drawImage(img, canvas.width - 74, 10, 64, 64);
+        // Draw larger (e.g. 100x100px) and more centered vertically
+        ctx.drawImage(img, canvas.width - 110, 14, 100, 100);
     } else if (img) {
         img.onload = () => drawBadge();
     }

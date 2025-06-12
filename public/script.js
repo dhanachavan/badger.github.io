@@ -247,9 +247,11 @@ function drawBadge() {
 
     // Draw ask me about field value
     const askmeabout = document.getElementById('askmeabout').value;
-    ctx.font = 'italic 14px "Mona Sans"';
-    ctx.fillStyle = '#333';
-    ctx.fillText(askmeabout, leftMargin, 80);
+    if (askmeabout) {
+        ctx.font = 'italic 14px "Mona Sans"';
+        ctx.fillStyle = '#333';
+        ctx.fillText(askmeabout, leftMargin, 80);
+    }
 
     // Convert to 2-bit black and white after drawing so you get an accurate preview
     // of e-ink display

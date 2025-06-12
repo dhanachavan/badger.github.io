@@ -26,9 +26,9 @@ function loadInitialData() {
         setInputValues({
             firstname: 'Mona',
             lastname: 'Lisa',
-            company: 'GitHub',
             jobtitle: 'Octocat',
-            pronouns: '',
+            askmeabout: '',
+            archetype: 'cat',
             githubhandle: 'mona'
         });
     }
@@ -63,7 +63,7 @@ function updateFullString() {
     });
 
     // Define the order of fields
-    const fieldOrder = ['firstname', 'lastname', 'company', 'jobtitle', 'pronouns', 'githubhandle'];
+    const fieldOrder = ['firstname', 'lastname', 'jobtitle', 'archetype', 'githubhandle'];
 
     // Map the ordered fields to their values
     const orderedValues = fieldOrder.map(fieldName => fieldValues[fieldName] || '');
@@ -120,7 +120,6 @@ function updateFormWithGitHubData(data) {
     if (data) {
         document.getElementById('firstname').value = data.name ? data.name.split(' ')[0] : '';
         document.getElementById('lastname').value = data.name ? data.name.split(' ').slice(1).join(' ') : '';
-        document.getElementById('company').value = data.company ? data.company.replace(/^@/, '') : '';
         document.getElementById('jobtitle').value = data.bio ? cleanJobTitle(data.bio.split('.')[0].trim()) : '';
         updateFullString(); // Update the full string with new data
     }
@@ -154,7 +153,7 @@ const otherInputs = document.querySelectorAll('input:not(#fullstring)');
 function parseFullString(fullString) {
     const parts = fullString.split('^');
     const id = parts[0].replace('iD', '');
-    const fields = ['firstname', 'lastname', 'company', 'jobtitle', 'pronouns', 'githubhandle'];
+    const fields = ['firstname', 'lastname', 'jobtitle', 'archetype', 'githubhandle'];
     const values = parts.slice(1, -1); // Exclude the last empty element
 
     const result = { id };
@@ -243,6 +242,24 @@ function drawBadge() {
     // Draw the text
     ctx.fillText(jobtitle, leftMargin, jobTitleY);
     ctx.fillText(githubhandle, leftMargin, githubHandleY);
+
+    // Get ask me about field value
+    const askmeabout = document.getElementById('askmeabout').value;
+    ctx.font = 'italic 14px "Mona Sans"';
+    ctx.fillStyle = '#333';
+    ctx.fillText(askmeabout, leftMargin, 80);
+
+    // Get archetype field value
+    const archetype = document.getElementById('archetype').value;
+    ctx.font = 'italic 14px "Mona Sans"';
+    ctx.fillStyle = '#333';
+    ctx.fillText(archetype, leftMargin, 80);
+
+    // Draw archetype image
+    const img = archetypeImages[archetype];
+    if (img && img.complete) {
+        ctx.drawImage(img, canvas.width - 74, 10, 64, 64);
+    }
 
     // Convert to 2-bit black and white after drawing so you get an accurate preview
     // of e-ink display
@@ -392,3 +409,16 @@ display.update()`;
         alert('Web Serial API not supported in this browser.');
     }
 }
+
+// Update event listeners for select
+const archetypeInput = document.getElementById('archetype');
+archetypeInput.addEventListener('change', updateFullString);
+
+// Preload archetype images
+const archetypeImages = {};
+const archetypeList = ['cat', 'dog', 'fox', 'owl', 'bear', 'octopus'];
+archetypeList.forEach(type => {
+    const img = new Image();
+    img.src = `./archetypes/${type}.png`;
+    archetypeImages[type] = img;
+});

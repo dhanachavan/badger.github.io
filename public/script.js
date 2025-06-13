@@ -236,12 +236,12 @@ function drawBadge() {
     ctx.fillText(jobtitle, leftMargin, jobTitleY);
     ctx.fillText(githubhandle, leftMargin, githubHandleY);
 
-    // Draw archetype image (make it bigger)
+    // Draw archetype image (make it even larger)
     let selectedArchetype = document.getElementById('archetype').value;
     const img = archetypeImages[selectedArchetype];
     if (img && img.complete && img.naturalWidth > 0) {
-        // Draw larger (e.g. 100x100px) and more centered vertically
-        ctx.drawImage(img, canvas.width - 110, 14, 100, 100);
+        // Draw even larger (e.g. 140x140px) and center vertically
+        ctx.drawImage(img, canvas.width - 150, (canvas.height - 140) / 2, 140, 140);
     } else if (img) {
         img.onload = () => drawBadge();
     }

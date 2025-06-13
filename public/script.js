@@ -36,7 +36,6 @@ window.addEventListener('load', loadInitialData);
 
 const inputs = document.querySelectorAll('input:not(#fullstring), select');
 const fullStringInput = document.getElementById('fullstring');
-const qrcodeContainer = document.getElementById('qrcode');
 const canvas = document.getElementById('badgeCanvas');
 const ctx = canvas.getContext('2d');
 const backgroundImage = new Image();
@@ -63,17 +62,18 @@ function updateFullString() {
 
     // Join the values and create the full string
     fullStringInput.value = `${id}iD^${orderedValues.join('^')}^`;
-    generateQRCode();
+    // generateQRCode();
     drawBadge();
 }
 
-function generateQRCode() {
-    qrcodeContainer.innerHTML = '';
-    const qr = qrcode(0, 'L');
-    qr.addData(fullStringInput.value);
-    qr.make();
-    qrcodeContainer.innerHTML = qr.createImgTag(2);
-}
+// function generateQRCode() {
+//     // QR code generation disabled
+//     // qrcodeContainer.innerHTML = '';
+//     // const qr = qrcode(0, 'L');
+//     // qr.addData(fullStringInput.value);
+//     // qr.make();
+//     // qrcodeContainer.innerHTML = qr.createImgTag(2);
+// }
 
 // Debounce function to reduce API calls
 function debounce(func, delay) {

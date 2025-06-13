@@ -56,7 +56,7 @@ function updateFullString() {
     });
 
     // Define the order of fields
-    const fieldOrder = ['firstname', 'lastname', 'jobtitle', 'archetype', 'githubhandle'];
+    const fieldOrder = ['firstname', 'lastname', 'jobtitle', 'archetype', 'githubhandle', 'askmeabout'];
 
     // Map the ordered fields to their values
     const orderedValues = fieldOrder.map(fieldName => fieldValues[fieldName] || '');
@@ -180,7 +180,77 @@ fullStringInput.addEventListener('keydown', (event) => {
     }
 });
 
-// Draw the badge to a canvas element
+// Draw the badge to a canvas element 
+
+// Optimize image loading: ensure background and archetype images are loaded before drawing
+function ensureImagesLoaded(callback) {
+    const images = [backgroundImage, ...Object.values(archetypeImages)];
+    let loaded = 0;
+    const total = images.length;
+
+    images.forEach(img => {
+        if (img.complete && img.naturalWidth > 0) {
+            loaded++;
+            if (loaded === total) callback();
+        } else {
+            img.onload = () => {
+                loaded++;
+                if (loaded === total) callback();
+            };
+        }
+    });
+}
+
+// Wrap drawBadge to wait for images
+function drawBadgeWithImages() {
+    ensureImagesLoaded(drawBadge);
+}
+
+// Replace all drawBadge() calls with drawBadgeWithImages()
+window.addEventListener('resize', drawBadgeWithImages);
+Promise.all([
+    document.fonts.ready,
+    new Promise(resolve => backgroundImage.onload = resolve)
+]).then(() => {
+    drawBadgeWithImages();
+});
+
+// Update archetype image on change
+archetypeInput.addEventListener('change', () => {
+    updateFullString();
+    setTimeout(drawBadgeWithImages, 50);
+});
+
+let imagesLoading = false;
+function ensureImagesLoaded(callback) {
+    const images = [backgroundImage, ...Object.values(archetypeImages)];
+    let loaded = 0;
+    const total = images.length;
+
+    if (imagesLoading) return;
+    imagesLoading = true;
+
+    function checkAllLoaded() {
+        loaded++;
+        if (loaded === total) {
+            imagesLoading = false;
+            callback();
+        }
+    }
+
+    images.forEach(img => {
+        if (img.complete && img.naturalWidth > 0) {
+            checkAllLoaded();
+        } else {
+            img.onload = () => {
+                img.onload = null; // Prevent multiple triggers
+                checkAllLoaded();
+            };
+        }
+    });
+}
+// Initial draw
+drawBadgeWithImages();
 function drawBadge() {
     // Enable crisp font rendering
     ctx.textRendering = 'optimizeLegibility';
